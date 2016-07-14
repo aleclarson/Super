@@ -54,7 +54,7 @@ Super = NamedFunction "Super", (kind, key, func) ->
 
 setKind Super, Function
 
-Super.regex = /(^|\=|\:|\s|\r)this.__super\(/
+Super.regex = /(^|\=|\:|\s|\r|\[)this.__super\(/
 
 Super.augment = (type) ->
   assertType type, Kind(Function)

@@ -61,7 +61,7 @@ module.exports = Super = NamedFunction("Super", function(kind, key, func) {
 
 setKind(Super, Function);
 
-Super.regex = /(^|\=|\:|\s|\r)this.__super\(/;
+Super.regex = /(^|\=|\:|\s|\r|\[)this.__super\(/;
 
 Super.augment = function(type) {
   assertType(type, Kind(Function));
@@ -89,4 +89,4 @@ Super.findInherited = function(kind, key) {
   return inherited;
 };
 
-//# sourceMappingURL=../../map/src/Super.map
+//# sourceMappingURL=map/Super.map

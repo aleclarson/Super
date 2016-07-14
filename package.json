@@ -1,7 +1,7 @@
 {
   "name": "Super",
   "version": "1.0.0",
-  "main": "js/src/Super",
+  "main": "js/Super",
   "dependencies": {
     "Kind": "aleclarson/Kind#1.0.0",
     "NamedFunction": "aleclarson/NamedFunction#2.0.0",
