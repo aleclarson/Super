@@ -1,0 +1,22 @@
+{
+  "name": "Super",
+  "version": "1.0.0",
+  "main": "js/Super",
+  "dependencies": {
+    "Kind": "aleclarson/Kind#1.0.0",
+    "NamedFunction": "aleclarson/NamedFunction#2.0.0",
+    "Property": "aleclarson/Property#1.1.1",
+    "assert": "aleclarson/assert#1.0.0",
+    "assertType": "aleclarson/assertType#2.0.0",
+    "getKind": "aleclarson/getKind#1.0.0",
+    "isDev": "aleclarson/isDev#1.0.0",
+    "setKind": "aleclarson/setKind#1.0.0",
+    "setType": "aleclarson/setType#1.0.0"
+  },
+  "lotus": {
+    "plugins": [
+      "lotus-coffee",
+      "lotus-runner"
+    ]
+  }
+}
