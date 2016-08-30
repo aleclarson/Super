@@ -1,4 +1,4 @@
-var Kind, NamedFunction, Property, Super, assert, assertType, getKind, setKind, setType, superFunc, superList, superMethod;
+var FunctionKind, NamedFunction, Property, Super, assertType, getKind, setKind, setType, superFunc, superList, superMethod;
 
 require("isDev");
 
@@ -14,9 +14,11 @@ setKind = require("setKind");
 
 setType = require("setType");
 
-assert = require("assert");
-
-Kind = require("Kind");
+isDev && (FunctionKind = (function() {
+  var Kind;
+  Kind = require("Kind");
+  return Kind(Function);
+})());
 
 superFunc = null;
 
@@ -25,24 +27,28 @@ superList = [];
 superMethod = Property({
   frozen: true,
   value: function(args) {
-    assert(superFunc, "No inherited method exists!");
+    if (isDev && !superFunc) {
+      throw Error("Inherited method not set!");
+    }
     return superFunc.apply(this, args);
   }
 });
 
-module.exports = Super = NamedFunction("Super", function(kind, key, func) {
+Super = NamedFunction("Super", function(kind, key, func) {
   var inherited, self;
   if (arguments.length < 3) {
     inherited = kind;
     func = key;
-    assertType(inherited, Kind(Function));
+    assertType(inherited, FunctionKind);
   } else {
-    assertType(kind, Kind(Function));
+    assertType(kind, FunctionKind);
     assertType(key, String);
     inherited = Super.findInherited(kind, key);
-    assert(inherited instanceof Function, "Cannot find inherited method for key: '" + key + "'");
+    if (isDev && !(inherited instanceof Function)) {
+      throw Error("Cannot find inherited method for key: '" + key + "'");
+    }
   }
-  assertType(func, Kind(Function));
+  assertType(func, FunctionKind);
   self = function() {
     var result;
     superList.push(superFunc);
@@ -59,12 +65,12 @@ module.exports = Super = NamedFunction("Super", function(kind, key, func) {
   return setType(self, Super);
 });
 
-setKind(Super, Function);
+module.exports = setKind(Super, Function);
 
 Super.regex = /(^|\=|\:|\s|\r|\[)this.__super\(/;
 
 Super.augment = function(type) {
-  assertType(type, Kind(Function));
+  assertType(type, FunctionKind);
   if (type.prototype.__super) {
     return;
   }
@@ -73,7 +79,7 @@ Super.augment = function(type) {
 
 Super.findInherited = function(kind, key) {
   var inherited;
-  assertType(kind, Kind(Function));
+  assertType(kind, FunctionKind);
   assertType(key, String);
   inherited = null;
   while (true) {
