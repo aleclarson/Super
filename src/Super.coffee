@@ -1,12 +1,11 @@
 
-require "isDev"
-
 NamedFunction = require "NamedFunction"
 assertType = require "assertType"
 Property = require "Property"
 getKind = require "getKind"
 setKind = require "setKind"
 setType = require "setType"
+isDev = require "isDev"
 
 isDev and
 FunctionKind = do ->
