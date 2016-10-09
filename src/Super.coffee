@@ -7,10 +7,9 @@ setKind = require "setKind"
 setType = require "setType"
 isDev = require "isDev"
 
-isDev and
-FunctionKind = do ->
+if isDev
   Kind = require "Kind"
-  Kind(Function)
+  Function.Kind ?= Kind Function
 
 # The current "this.__super"
 superFunc = null
@@ -32,16 +31,16 @@ Super = NamedFunction "Super", (kind, key, func) ->
   if arguments.length < 3
     inherited = kind
     func = key
-    assertType inherited, FunctionKind
+    assertType inherited, Function.Kind
 
   else # Find the 'inherited' function by traversing the prototype chain.
-    assertType kind, FunctionKind
+    assertType kind, Function.Kind
     assertType key, String
     inherited = Super.findInherited kind, key
     if isDev and not (inherited instanceof Function)
       throw Error "Cannot find inherited method for key: '#{key}'"
 
-  assertType func, FunctionKind
+  assertType func, Function.Kind
   self = ->
     superList.push superFunc
     superFunc = inherited
@@ -58,18 +57,21 @@ Super = NamedFunction "Super", (kind, key, func) ->
 module.exports = setKind Super, Function
 
 Super.augment = (type) ->
-  assertType type, FunctionKind
+  assertType type, Function.Kind
   return if type.prototype.__super
   superMethod.define type.prototype, "__super"
   return
 
 Super.findInherited = (kind, key) ->
-  assertType kind, FunctionKind
+  assertType kind, Function.Kind
   assertType key, String
+
   inherited = null
   loop
     inherited = kind.prototype[key]
     break if inherited
+
     kind = getKind kind
     break if not kind
+
   return inherited
