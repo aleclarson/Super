@@ -57,8 +57,6 @@ Super = NamedFunction "Super", (kind, key, func) ->
 
 module.exports = setKind Super, Function
 
-Super.regex = /(^|\=|\:|\s|\r|\[)this.__super\(/
-
 Super.augment = (type) ->
   assertType type, FunctionKind
   return if type.prototype.__super
