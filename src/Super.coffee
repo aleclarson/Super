@@ -1,14 +1,15 @@
 
-require "isDev"
-
 NamedFunction = require "NamedFunction"
 assertType = require "assertType"
 Property = require "Property"
 getKind = require "getKind"
 setKind = require "setKind"
 setType = require "setType"
-assert = require "assert"
-Kind = require "Kind"
+isDev = require "isDev"
+
+if isDev
+  Kind = require "Kind"
+  Function.Kind ?= Kind Function
 
 # The current "this.__super"
 superFunc = null
@@ -20,25 +21,26 @@ superList = []
 superMethod = Property
   frozen: yes
   value: (args) ->
-    assert superFunc, "No inherited method exists!"
+    if isDev and not superFunc
+      throw Error "Inherited method not set!"
     superFunc.apply this, args
 
-module.exports =
 Super = NamedFunction "Super", (kind, key, func) ->
 
   # Was the 'inherited' function provided directly?
   if arguments.length < 3
     inherited = kind
     func = key
-    assertType inherited, Kind(Function)
+    assertType inherited, Function.Kind
 
   else # Find the 'inherited' function by traversing the prototype chain.
-    assertType kind, Kind(Function)
+    assertType kind, Function.Kind
     assertType key, String
     inherited = Super.findInherited kind, key
-    assert inherited instanceof Function, "Cannot find inherited method for key: '#{key}'"
+    if isDev and not (inherited instanceof Function)
+      throw Error "Cannot find inherited method for key: '#{key}'"
 
-  assertType func, Kind(Function)
+  assertType func, Function.Kind
   self = ->
     superList.push superFunc
     superFunc = inherited
@@ -52,23 +54,24 @@ Super = NamedFunction "Super", (kind, key, func) ->
 
   return setType self, Super
 
-setKind Super, Function
-
-Super.regex = /(^|\=|\:|\s|\r|\[)this.__super\(/
+module.exports = setKind Super, Function
 
 Super.augment = (type) ->
-  assertType type, Kind(Function)
+  assertType type, Function.Kind
   return if type.prototype.__super
   superMethod.define type.prototype, "__super"
   return
 
 Super.findInherited = (kind, key) ->
-  assertType kind, Kind(Function)
+  assertType kind, Function.Kind
   assertType key, String
+
   inherited = null
   loop
     inherited = kind.prototype[key]
     break if inherited
+
     kind = getKind kind
     break if not kind
+
   return inherited
