@@ -3,8 +3,6 @@ NamedFunction = require "NamedFunction"
 assertType = require "assertType"
 Property = require "Property"
 getKind = require "getKind"
-setKind = require "setKind"
-setType = require "setType"
 isDev = require "isDev"
 
 if isDev
@@ -52,9 +50,9 @@ Super = NamedFunction "Super", (kind, key, func) ->
     self.toString = ->
       func.toString()
 
-  return setType self, Super
+  return self
 
-module.exports = setKind Super, Function
+module.exports = Super
 
 Super.augment = (type) ->
   assertType type, Function.Kind

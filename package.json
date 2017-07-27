@@ -16,8 +16,6 @@
     "Property": "aleclarson/Property#1.2.4",
     "assertType": "aleclarson/assertType#2.0.2",
     "getKind": "aleclarson/getKind#1.0.0",
-    "isDev": "aleclarson/isDev#2.0.0",
-    "setKind": "aleclarson/setKind#1.0.0",
-    "setType": "aleclarson/setType#1.0.0"
+    "isDev": "aleclarson/isDev#2.0.0"
   }
 }
